@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 function listen() {
-  app.listen(3005);
-  console.log('Express app started on port ' + 3005);
+  app.listen(config.port);
+  console.log('Express app started on port ' + config.port);
 }
 
 function connect() {
