@@ -6,30 +6,30 @@ const Schema = mongoose.Schema;
  * patient Schema
  */
 
-const patientSchema = new Schema({
+const prescriptionSchema = new Schema({
   name: { type: String, trim: true, required: true },
-  age: { type: String, trim: true, required: true },
-  disease: { type: String, trim: true, required: true  },
-  contactNumber: { type: String, trim: true, required: true },
-  appointmentDate: { type: String, default: 'user', trim: true, required: true },
-  appointmentDetails: { type: String },
-}, { timeseries : true });
+  dosage: { type: String, trim: true, required: true },
+  intakeRoutine: { type: String, trim: true, required: true  },
+  intakePattern: { type: String, trim: true, required: true },
+  patientId: { type: String, trim: true, required: true },
+  visitId: { type: String, trim: true, required: true },
+}, { timeseries : true});
 
 /**
  * Statics
  */
 
-patientSchema.statics = {
+prescriptionSchema.statics = {
 
   load: function (options, cb) {
-    options.select = options.select || 'name age disease contanctNumber appointmentDate appointmentDetails';
+    options.select = options.select || 'name dosage intakeRoutine intakePattern';
     return this.findOne(options.criteria)
       .select(options.select)
       .exec(cb);
   },
 
   list: function (options, cb) {
-    const { find, select = 'name email -_id' } = options;
+    const { find, select = 'name dosage intakeRoutine intakePattern' } = options;
     return this.find(find)
       .select(select)
       .exec(cb);
@@ -41,4 +41,4 @@ patientSchema.statics = {
   }
 };
 
-module.exports = mongoose.model('patient', patientSchema);
+module.exports = mongoose.model('prescription', prescriptionSchema);
