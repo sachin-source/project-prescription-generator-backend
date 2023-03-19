@@ -13,7 +13,7 @@ const prescriptionSchema = new Schema({
   intakePattern: { type: String, trim: true, required: true },
   patientId: { type: String, trim: true, required: true },
   visitId: { type: String, trim: true, required: true },
-}, { timeseries : true});
+}, { timestamps : true});
 
 /**
  * Statics
