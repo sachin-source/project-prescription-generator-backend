@@ -13,5 +13,10 @@ const getPatientList = (req, res) => {
             res.send({ status:!err, patients })
     })
 }
+const getPatientNames = (req, res) => {
+    return patient.find({}, { name : 1 }, { sort: { createdAt : -1}}, (err, names) => {
+        res.send({status:!err, names})
+    })
+}
 
-module.exports = {getPatientList}
+module.exports = {getPatientList, getPatientNames}
