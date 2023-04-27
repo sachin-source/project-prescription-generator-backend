@@ -13,7 +13,7 @@ const patientSchema = new Schema({
   contactNumber: { type: String, trim: true, required: true },
   appointmentDate: { type: String, default: 'user', trim: true, required: true },
   appointmentDetails: { type: String },
-}, { timeseries : true });
+}, { timestamps : true });
 
 /**
  * Statics

@@ -9,7 +9,7 @@ const visitSchema = new Schema({
   name: { type: String, trim: true },
   patientId: { type: String, trim: true, required: true },
   appointmentDate: { type: String, trim: true, required: true },
-}, { timeseries : true});
+}, { timestamps : true});
 
 /**
  * Statics

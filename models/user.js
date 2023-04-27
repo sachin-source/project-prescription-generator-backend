@@ -17,7 +17,7 @@ const UserSchema = new Schema({
   role: { type: String, default: 'user', trim: true, required: true },
   authToken: { type: String, default: '' },
   notificationToken: [{ type: String }],
-});
+}, { timestamps : true });
 
 const validatePresenceOf = value => value && value.length;
 
