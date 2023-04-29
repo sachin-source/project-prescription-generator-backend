@@ -18,6 +18,7 @@ const savePrescription = (req, res) => {
                     const prescriptionDetailsArr = prescriptionDetails.map((p) => {
                         return {...p, ...{ visitId : visitData._id.toString(), patientId }}
                     })
+                    console.log(prescriptionDetailsArr)
                     prescription.insertMany(prescriptionDetailsArr).then((p) => {
                         res.send({ status : true, msg : "prescriptions saved successfully" })
                     })
