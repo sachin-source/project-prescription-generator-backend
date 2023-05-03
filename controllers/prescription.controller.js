@@ -28,4 +28,9 @@ const savePrescription = (req, res) => {
     })
 }
 
-module.exports = { getPrescriptionList, savePrescription }
+const uploadPrescriptions = (req, res) => {
+    console.log(req.files)
+    return res.send(req.files)
+}
+
+module.exports = { getPrescriptionList, savePrescription, uploadPrescriptions }
