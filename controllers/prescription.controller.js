@@ -1,6 +1,8 @@
 const prescription = require("../models/prescription");
 const patient = require("../models/patient");
 const visit = require("../models/visit");
+const ExcelJS = require('exceljs');
+
 
 const getPrescriptionList = (req, res) => {
     const { name, age, disease, contactNumber, appointmentDate, appointmentDetails } = req.body;
@@ -18,7 +20,6 @@ const savePrescription = (req, res) => {
                     const prescriptionDetailsArr = prescriptionDetails.map((p) => {
                         return {...p, ...{ visitId : visitData._id.toString(), patientId }}
                     })
-                    console.log(prescriptionDetailsArr)
                     prescription.insertMany(prescriptionDetailsArr).then((p) => {
                         res.send({ status : true, msg : "prescriptions saved successfully" })
                     })
@@ -30,7 +31,9 @@ const savePrescription = (req, res) => {
 
 const uploadPrescriptions = (req, res) => {
     console.log(req.files)
-    return res.send(req.files)
+    // return res.send(req.files)
+    const workbook = new ExcelJS.Workbook();
+
 }
 
 module.exports = { getPrescriptionList, savePrescription, uploadPrescriptions }
