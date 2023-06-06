@@ -12,7 +12,7 @@ const getPatientList = (req, res) => {
     })
 }
 const getPatientNames = (req, res) => {
-    return patient.find({}, { name : 1 }, { sort: { createdAt : -1}}, (err, names) => {
+    return patient.find({}, { name : 1, contactNumber : 1 }, { sort: { createdAt : -1}}, (err, names) => {
         res.send({status:!err, names})
     })
 }
