@@ -10,9 +10,9 @@ const getPrescriptionList = (req, res) => {
 }
 
 const savePrescription = (req, res) => {
-    const { name, age, disease, contactNumber, appointmentDate, appointmentDetails, prescriptionDetails } = req.body;
-    console.log({ name, age, disease, contactNumber, appointmentDate, appointmentDetails, prescriptionDetails });
-    patient.create({ name, age, disease, contactNumber, appointmentDate, appointmentDetails }).then((data) => {
+    const { name, age, disease, contactNumber, appointmentDate, appointmentDetails, prescriptionDetails, email } = req.body;
+    console.log({ name, age, disease, contactNumber, appointmentDate, appointmentDetails, prescriptionDetails, email });
+    patient.create({ name, age, disease, contactNumber, appointmentDate, appointmentDetails, email }).then((data) => {
         patient.load({ criteria : {name, contactNumber} }).then((patientData) => {
             const patientId = patientData._id.toString();
             visit.create({ name, patientId, appointmentDate }).then((d) => {
