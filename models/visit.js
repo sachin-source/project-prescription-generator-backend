@@ -9,6 +9,11 @@ const visitSchema = new Schema({
   name: { type: String, trim: true },
   patientId: { type: String, trim: true, required: true },
   appointmentDate: { type: String, trim: true, required: true },
+  diagnosis: { type: String, trim: true, required: true  },
+  appointmentDate: { type: String, default: 'user', trim: true, required: true },
+  patientComplaint: { type: String },
+  bloodPressure : { type: String, trim : true },
+  temparature: { type : String, trim : true }
 }, { timestamps : true});
 
 /**
@@ -31,8 +36,8 @@ visitSchema.statics = {
       .exec(cb);
   },
   create: function (patientData) {
-    const { name, patientId, appointmentDate } = patientData;
-    return this.updateOne({ patientId, appointmentDate }, { name }, { upsert : true })
+    const { name, patientId, appointmentDate, diagnosis, patientComplaint, bloodPressure, temparature } = patientData;
+    return this.updateOne({ patientId, appointmentDate }, { name, diagnosis, patientComplaint, bloodPressure, temparature }, { upsert : true })
   }
 };
 

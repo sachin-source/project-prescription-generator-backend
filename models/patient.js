@@ -9,11 +9,9 @@ const Schema = mongoose.Schema;
 const patientSchema = new Schema({
   name: { type: String, trim: true, required: true },
   age: { type: String, trim: true, required: true },
-  disease: { type: String, trim: true, required: true  },
+  gender: { type: String, trim: true, required: true, enum : ['male', 'female', 'others'] },
   contactNumber: { type: String, trim: true, required: true },
-  email: { type: String, trim: true },
-  appointmentDate: { type: String, default: 'user', trim: true, required: true },
-  appointmentDetails: { type: String },
+  email: { type: String, trim: true }
 }, { timestamps : true });
 
 /**
@@ -23,7 +21,7 @@ const patientSchema = new Schema({
 patientSchema.statics = {
 
   load: function (options, cb) {
-    options.select = options.select || 'name age disease contanctNumber appointmentDate appointmentDetails';
+    options.select = options.select || 'name age gender diagnosis contanctNumber email appointmentDate appointmentDetails patientComplaint bloodPresuure temparature';
     return this.findOne(options.criteria)
       .select(options.select)
       .exec(cb);
@@ -37,8 +35,8 @@ patientSchema.statics = {
   },
 
   create: function (patientData) {
-    const { name, age, disease, contactNumber, appointmentDate, appointmentDetails, email } = patientData;
-    return this.updateOne({ name, contactNumber }, { age, email, disease, appointmentDate, appointmentDetails }, { upsert : true })
+    const { name, age, gender, contactNumber, email,  } = patientData;
+    return this.updateOne({ name, contactNumber }, { age, gender, email }, { upsert : true })
   }
 };
 
