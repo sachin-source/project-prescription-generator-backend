@@ -10,18 +10,19 @@ const getPrescriptionList = (req, res) => {
 }
 
 const savePrescription = (req, res) => {
-    const { name, age, gender, email, diagnosis, appointmentDate, patientComplaint, bloodPressure, temparature, contactNumber, prescriptionDetails } = req.body;
+    const { name, age, gender, email, diagnosis, appointmentDate, patientComplaint, bloodPressure, temparature, contactNumber, prescriptionDetails, followup, advise } = req.body;
     // console.log({ name, age, disease, contactNumber, appointmentDate, appointmentDetails, prescriptionDetails, email });
     patient.create({ name, age, gender, contactNumber, email }).then((data) => {
         patient.load({ criteria : {name, contactNumber} }).then((patientData) => {
             const patientId = patientData._id.toString();
-            visit.create({ name, patientId, appointmentDate, diagnosis, patientComplaint, bloodPressure, temparature }).then((d) => {
+            console.log({ loc : __filename, name, age, gender, email, diagnosis, appointmentDate, patientComplaint, bloodPressure, temparature, contactNumber, prescriptionDetails, followup, advise })
+            visit.create({ name, patientId, appointmentDate, diagnosis, patientComplaint, bloodPressure, temparature, followup, advise }).then((d) => {
                 visit.load({ criteria : { name, patientId, appointmentDate }}).then((visitData) => {
                     const prescriptionDetailsArr = prescriptionDetails.map((p) => {
                         return {...p, ...{ visitId : visitData._id.toString(), patientId }}
                     })
                     prescription.insertMany(prescriptionDetailsArr).then((p) => {
-                        console.log({ p, visitData, patientData })
+                        // console.log({ p, visitData, patientData })
                         res.send({ status : true, msg : "prescriptions saved successfully" })
                     })
                 })
