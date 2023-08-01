@@ -13,7 +13,7 @@ router.use('/user', userRoutes);
 router.use('/patient', patientRoutes);
 router.use('/prescription', authenticate, prescriptionRoutes);
 router.use('/visit', visitRoutes);
-router.use('/generate-pdf', authenticate, pdfGeneraterRoutes);
+router.use('/generate-pdf',  pdfGeneraterRoutes);
 
 router.get('/*', (req, res) =>
     res.send('OK')
