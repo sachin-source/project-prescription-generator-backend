@@ -1,6 +1,38 @@
 const PDFDocument = require('pdfkit');
 
 // index.js
+prescriptionData = {
+  name: 'Pankaj Kumavat',
+  age: '12',
+  gender: 'male',
+  email: 'pankaj.kumavat',
+  diagnosis: 'Loosing weight',
+  appointmentDate: '2023-08-31',
+  patientComplaint: 'Loosing weight, slow heart beat, cough etc',
+  bloodPressure: '120-80',
+  temparature: '234',
+  contactNumber: '9812345678',
+  prescriptionDetails: [
+    {
+      name: 'DOLO 350',
+      type: 'TAB',
+      intakeRoute: 'Oral Head',
+      dosage: '1mg',
+      intakeRoutine: '111',
+      intakePattern: 'Before Meals'
+    },
+    {
+      name: 'B complex',
+      type: 'INJ',
+      intakeRoute: 'IV',
+      dosage: '2mg',
+      intakeRoutine: '010',
+      intakePattern: 'After Meals'
+    }
+  ],
+  followup: 'no followup',
+  advise: 'no advise\nadvisesss'
+}
 
 const invoice = {
 	shipping: {
