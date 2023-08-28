@@ -1,37 +1,38 @@
 const PDFDocument = require('pdfkit');
+const path = require('path')
 
 // index.js
-prescriptionData = {
-  name: 'Pankaj Kumavat',
-  age: '12',
-  gender: 'male',
-  email: 'pankaj.kumavat',
-  diagnosis: 'Loosing weight',
-  appointmentDate: '2023-08-31',
-  patientComplaint: 'Loosing weight, slow heart beat, cough etc',
-  bloodPressure: '120-80',
-  temparature: '234',
-  contactNumber: '9812345678',
-  prescriptionDetails: [
-    {
-      name: 'DOLO 350',
-      type: 'TAB',
-      intakeRoute: 'Oral Head',
-      dosage: '1mg',
-      intakeRoutine: '111',
-      intakePattern: 'Before Meals'
-    },
-    {
-      name: 'B complex',
-      type: 'INJ',
-      intakeRoute: 'IV',
-      dosage: '2mg',
-      intakeRoutine: '010',
-      intakePattern: 'After Meals'
-    }
-  ],
-  followup: 'no followup',
-  advise: 'no advise\nadvisesss'
+prescriptionDataa = {
+	name: 'Pankaj Kumavat',
+	age: '12',
+	gender: 'male',
+	email: 'pankaj.kumavat',
+	diagnosis: 'Loosing weight',
+	appointmentDate: '2023-08-31',
+	patientComplaint: 'Loosing weight, slow heart beat, cough etc',
+	bloodPressure: '120-80',
+	temparature: '234',
+	contactNumber: '9812345678',
+	prescriptionDetails: [
+		{
+			name: 'DOLO 350',
+			type: 'TAB',
+			intakeRoute: 'Oral Head',
+			dosage: '1mg',
+			intakeRoutine: '111',
+			intakePattern: 'Before Meals'
+		},
+		{
+			name: 'B complex',
+			type: 'INJ',
+			intakeRoute: 'IV',
+			dosage: '2mg',
+			intakeRoutine: '100',
+			intakePattern: 'After Meals'
+		},
+	],
+	followup: 'no followup',
+	advise: 'no advise\nadvisesss'
 }
 
 const invoice = {
@@ -63,21 +64,21 @@ const invoice = {
 };
 
 const getDataToPDF = (req, res) => {
-    const { name, age, gender, diagnosis, contactNumber, patientComplaint, appointmentDate, bloodPressure, temparature, followup, advise, prescriptionDetails } = req.body;
-
-    console.log(JSON.stringify(req.body))
-    let doc = new PDFDocument({ margin: 50 });
-    doc.pipe(res)
-    generateHeader(doc);
-    generateCustomerInformation(doc, invoice);
-    generateInvoiceTable(doc, invoice);
-    generateFooter(doc);
-    doc.end();    
+	const prescriptionData = req.body
+	let doc = new PDFDocument({ margin: 50 });
+	doc.registerFont('kannada', path.join(__dirname + '/..', 'Kedage.ttf'));
+	doc.font('Helvetica')
+	doc.pipe(res)
+	generateHeader(doc);
+	generatePatientInformation(doc, prescriptionData);
+	generatePrescripptionTable(doc, prescriptionData);
+	generateFollowUpAndAdviceSection(doc, prescriptionData);
+	doc.end();
 }
 
 const generateHeader = (doc) => {
 	doc
-    .image('pre-logo.png', 50, 45, { width: 50 })
+		.image('pre-logo.png', 50, 45, { width: 50 })
 		.fillColor('#444444')
 		.fontSize(20)
 		.text('Ayushman Hospital', 110, 57)
@@ -85,6 +86,7 @@ const generateHeader = (doc) => {
 		.text('Dr. Shivashankar Huddar', 200, 50, { align: 'right' })
 		.text('123 Main Street', 200, 65, { align: 'right' })
 		.text('Chennamma Circle, Hubli, 10021', 200, 80, { align: 'right' })
+		.underline(48, 80, 530, 23)
 		.moveDown();
 }
 
@@ -94,54 +96,98 @@ const generateFooter = (doc) => {
 	).text(
 		'Payment is due within 15 days. Thank you for your business.',
 		50,
-		780,
+		740,
 		{ align: 'center', width: 500 },
 	);
 }
 
-const generateCustomerInformation = (doc, invoice) => {
-	const shipping = invoice.shipping;
-
-	doc.text(`Invoice Number: ${invoice.invoice_nr}`, 50, 200)
-		.text(`Invoice Date: ${new Date().getDate()}`, 50, 215)
-		.text(`Balance Due: ${invoice.subtotal - invoice.paid}`, 50, 130)
-
-		.text(shipping.name, 300, 200)
-		.text(shipping.address, 300, 215)
-		.text(
-			`${shipping.city}, ${shipping.state}, ${shipping.country}`,
-			300,
-			130,
-		)
+const generatePatientInformation = (doc, prescriptionData) => {
+	doc
+		.fontSize(15)
+		.text(`Patient details`, 50, 120)
+		.fontSize(10)
+		.text(`Patient Name : ${prescriptionData.name}`, 50, 150)
+		.text(`Age/Gender : ${prescriptionData.age}/${prescriptionData.gender.at(0).toUpperCase()}`, 50, 165)
+		.text(`Patient Complaint : ${prescriptionData.patientComplaint}`, 50, 180)
+		.text(`Diagnosis : ${prescriptionData.diagnosis}`, 50, 195)
+		.text(`Contact number : ${prescriptionData.contactNumber}`, 400, 150)
+		.text(`Date : ${prescriptionData.appointmentDate}`, 400, 165)
+		.text(`Blood Pressure : ${prescriptionData.bloodPressure}`, 400, 180)
+		.text(`Temparature : ${prescriptionData.temparature}`, 400, 195)
 		.moveDown();
 }
 
-const generateTableRow = (doc, y, c1, c2, c3, c4, c5) => {
+const generateTableRow = (doc, y, item) => {
+	const { name, type, intakeRoute, dosage, intakeRoutine, intakePattern } = item;
+
 	doc.fontSize(10)
-		.text(c1, 50, y)
-		.text(c2, 150, y)
-		.text(c3, 280, y, { width: 90, align: 'right' })
-		.text(c4, 370, y, { width: 90, align: 'right' })
-		.text(c5, 0, y, { align: 'right' });
+	.text(type, 50, y)
+		.text(name, 90, y, { width: 150 })
+		.text(intakeRoute, 240, y, { width: 80 })
+		.text(dosage, 325, y)
+		.font('kannada')
+		.text(generateRoutine(intakeRoutine), 370, y, { width: 130 })
+		.text(getKannadaText(intakePattern), 490, y)
+		.font('Helvetica')
+		.moveDown()
 }
 
-function generateInvoiceTable(doc, invoice) {
-	let i,
-		invoiceTableTop = 330;
+const getKannadaText = (text) => {
+	const textUpdated = text.toLowerCase();
+	const kannadaStrings = ['ಬೆಳಗ್ಗೆ', 'ಮಧ್ಯಾಹ್ನ', 'ರಾತ್ರಿ', 'ಊಟದ ನಂತರ', 'ಊಟದ ಮೊದಲು']
+	const englishStrings = ['morning', 'afternoon', 'night', 'after meals', 'before meals']
+	const textIndex = englishStrings.findIndex(e => e == textUpdated);
+	return kannadaStrings[textIndex]
+}
 
-	for (i = 0; i < invoice.items.length; i++) {
-		const item = invoice.items[i];
-		const position = invoiceTableTop + (i + 1) * 30;
-		generateTableRow(
-			doc,
-			position,
-			item.item,
-			item.description,
-			item.amount / item.quantity,
-			item.quantity,
-			item.amount,
-		);
+const generateRoutine = (routineText) => {
+	const routineTimings = ['morning', 'afternoon', 'night']
+	const routines = routineText.split('').map((s, i) => +s ? getKannadaText(routineTimings[i]) : '        ').join(' - ')
+	return routines
+}
+
+const generatePrescriptionHeadings = (doc, y) => {
+	doc.fontSize(12)
+		.text('Type', 50, y)
+		.text('Name', 90, y, { width: 150 })
+		.text('Intake Route', 240, y, { width: 80 })
+		.text('Dose', 325, y)
+		.text('Routine', 370, y, { align: 'left', width: 130 })
+		.text('Pattern', 490, y)
+		.underline(48, y, 510, 18)
+		.moveDown()
+}
+
+function generatePrescripptionTable(doc, prescriptionData) {
+	let i, invoiceTableTop = 295;
+	doc.fontSize(15)
+		.text(`Prescription details`, 50, 250)
+		.fontSize(10)
+		generatePrescriptionHeadings( doc, 290);
+	for (i = 0; i < prescriptionData.prescriptionDetails.length; i++) {
+		const item = prescriptionData.prescriptionDetails[i];
+		const position = invoiceTableTop + (i + 1) * 20;
+		generateTableRow( doc, position, item );
 	}
+}
+
+const generateFollowUpAndAdviceSection = (doc, prescriptionData) => {
+	doc
+	.moveDown()
+	.moveDown()
+	.moveDown()
+	.fontSize(15)
+	.text(`Followup`, 50)
+	.fontSize(10)
+	.text(`${prescriptionData.followup}`)
+	.moveDown()
+	.moveDown()
+	.moveDown()
+	.fontSize(15)
+	.text(`Advises`, 50)
+	.fontSize(10)
+	.text(`${prescriptionData.advise}`)
+	.moveDown()
 }
 
 module.exports = { getDataToPDF }
