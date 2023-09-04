@@ -64,7 +64,7 @@ const invoice = {
 };
 
 const getDataToPDF = (req, res) => {
-	const prescriptionData = req.body
+	const prescriptionData = prescriptionDataa //req.body
 	let doc = new PDFDocument({ margin: 50 });
 	doc.registerFont('kannada', path.join(__dirname + '/..', 'Kedage.ttf'));
 	doc.font('Helvetica')

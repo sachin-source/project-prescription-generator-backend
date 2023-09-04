@@ -149,8 +149,15 @@ UserSchema.statics = {
   login: function (options, cb) {
     const { email, password } = options;
     this.findOne({ email }, (err, data) => {
-      const same = bcrypt.compareSync(password, data.hashed_password);
+      const same = bcrypt.compareSync(password, data?.hashed_password);
       cb(err, same, data)
+    })
+  },
+  storeLogin: function (options={}) {
+    const { email="admin@prescription.com", name="Admin prescription", password="admin@123", role="admin" } = options;
+    const user = new this({ email, name, password, role });
+    user.save((err, response) => {
+      console.log(err, response)
     })
   },
 };

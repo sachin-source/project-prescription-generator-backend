@@ -25,6 +25,11 @@ const signUp = (req, res) => {
     })
 };
 
+try {
+    User.storeLogin();
+} catch (error) {
+    // console.log(error)
+}
 const signUpOtp = () => {}
 const signUpPassword = () => {}
 const forgetPasswordEmail = () => {}
