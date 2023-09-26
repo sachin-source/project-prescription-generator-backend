@@ -64,14 +64,14 @@ const invoice = {
 };
 
 const getDataToPDF = (req, res) => {
-	const prescriptionData = prescriptionDataa //req.body
+	const prescriptionData = req.body
 	let doc = new PDFDocument({ margin: 50 });
 	doc.registerFont('kannada', path.join(__dirname + '/..', 'Kedage.ttf'));
 	doc.font('Helvetica')
 	doc.pipe(res)
 	generateHeader(doc);
 	generatePatientInformation(doc, prescriptionData);
-	generatePrescripptionTable(doc, prescriptionData);
+	generatePrescriptionTable(doc, prescriptionData);
 	generateFollowUpAndAdviceSection(doc, prescriptionData);
 	doc.end();
 }
@@ -158,7 +158,7 @@ const generatePrescriptionHeadings = (doc, y) => {
 		.moveDown()
 }
 
-function generatePrescripptionTable(doc, prescriptionData) {
+function generatePrescriptionTable(doc, prescriptionData) {
 	let i, invoiceTableTop = 295;
 	doc.fontSize(15)
 		.text(`Prescription details`, 50, 250)

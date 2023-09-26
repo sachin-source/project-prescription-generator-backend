@@ -11,7 +11,6 @@ const getPrescriptionList = (req, res) => {
 
 const savePrescription = (req, res) => {
     const { name, age, gender, email, diagnosis, appointmentDate, patientComplaint, bloodPressure, temparature, contactNumber, prescriptionDetails, followup, advise } = req.body;
-    // console.log({ name, age, disease, contactNumber, appointmentDate, appointmentDetails, prescriptionDetails, email });
     patient.create({ name, age, gender, contactNumber, email }).then((data) => {
         patient.load({ criteria : {name, contactNumber} }).then((patientData) => {
             const patientId = patientData._id.toString();

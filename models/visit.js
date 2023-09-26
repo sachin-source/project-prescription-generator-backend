@@ -10,7 +10,6 @@ const visitSchema = new Schema({
   patientId: { type: String, trim: true, required: true },
   appointmentDate: { type: String, trim: true, required: true },
   diagnosis: { type: String, trim: true, required: true  },
-  appointmentDate: { type: String, default: 'user', trim: true, required: true },
   patientComplaint: { type: String },
   bloodPressure : { type: String, trim : true },
   temparature: { type : String, trim : true },
